@@ -4,10 +4,12 @@ A simple package to scrape recipe information from major recipe sites.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Download the most recent release [here](https://pip.pypa.io/en/stable/) & run pip install
+
+
 
 ```bash
-pip install recipe-decrapinator
+pip install recipe_decrapinator-0.0.1-py3-none-any.whl
 ```
 
 ## Usage
