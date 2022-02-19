@@ -1,0 +1,15 @@
+{
+   "url":"www.allrecipes.com",
+   "ingredients":{
+      "type":"li",
+      "container":".ingredients-section",
+      "item":".ingredients-item",
+      "text":".ingredients-item-name"
+   },
+   "directions":{
+      "type":"li",
+      "container":".instructions-section",
+      "item":".instructions-section-item",
+      "text":".paragraph p"
+   }
+}
