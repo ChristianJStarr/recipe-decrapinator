@@ -4,18 +4,17 @@ A simple package to scrape recipe information from major recipe sites.
 
 ## Installation
 
-Download the most recent release [here](https://pip.pypa.io/en/stable/) & run pip install
-
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install recipe-decrapinator.
 
 
 ```bash
-pip install recipe_decrapinator-0.0.1-py3-none-any.whl
+pip install recipe-decrapinator
 ```
 
 ## Usage
 
 ```python
-import recipe_decrapinator
+from recipe_decrapinator.decrapinator import decrapinate
 
 # returns recipe data object
 recipe_decrapinator.decrapinate('www.somerecipes.com/chocolate-cake/')
