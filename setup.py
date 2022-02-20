@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='recipe-decrapinator',
-    version='0.0.1',
+    version='0.0.2',
     description='A simple package to scrape recipe information.',
     url='https://github.com/christianjstarr/recipe-decrapinator',
     author='Christian Starr',
