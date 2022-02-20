@@ -9,24 +9,36 @@ from urllib.parse import urlparse
 
 
 def decrapinate(url):
-    return process_recipe(url, validate_url(url))
+    validated_url, hostname = validate_url(url)
+    return process_recipe(validated_url, get_schema(hostname))
 
 def validate_url(url):
-    schema = None
+    validated_url = None
+    hostname = None
     if url:
-        parsed_url = urlparse(url)
-        if parsed_url and parsed_url.hostname:
-            local_path = 'schemas/' + parsed_url.hostname + '.json'
-            full_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), local_path)
-            if os.path.isfile(full_path):
-                try:
-                    f = open(full_path, 'r')
-                    data = f.read()
-                    f.close()
-                    if data:
-                        schema = json.loads(data)
-                except:
-                    return None
+        validated_url = url.replace('https://', '')
+        validated_url = validated_url.replace('http://', '')
+        validated_url = 'https://' + validated_url
+        if validated_url:
+            parsed_url = urlparse(validated_url)
+            if parsed_url and parsed_url.hostname:
+                hostname = parsed_url.hostname
+    return validated_url, hostname
+
+def get_schema(hostname):
+    schema = None
+    if hostname:
+        local_path = 'schemas/' + hostname + '.json'
+        full_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), local_path)
+        if os.path.isfile(full_path):
+            try:
+                f = open(full_path, 'r')
+                data = f.read()
+                f.close()
+                if data:
+                    schema = json.loads(data)
+            except:
+                return None
     return schema
 
 def process_recipe(url, schema):
