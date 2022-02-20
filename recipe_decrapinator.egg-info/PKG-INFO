@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: recipe-decrapinator
+Version: 0.0.1
+Summary: A simple package to scrape recipe information.
+Home-page: https://github.com/christianjstarr/recipe-decrapinator
+Author: Christian Starr
+Author-email: christianjstarr@icloud.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: MIT License
+Classifier: Operating System :: OS Independant
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+License-File: LICENSE
+
+UNKNOWN
+

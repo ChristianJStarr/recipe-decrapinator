@@ -1,8 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-setup.cfg
-src/recipe_decrapinator_christianjstarr.egg-info/PKG-INFO
-src/recipe_decrapinator_christianjstarr.egg-info/SOURCES.txt
-src/recipe_decrapinator_christianjstarr.egg-info/dependency_links.txt
-src/recipe_decrapinator_christianjstarr.egg-info/top_level.txt
