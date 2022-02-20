@@ -2,9 +2,9 @@
    "url":"www.allrecipes.com",
    "ingredients":{
       "type":"li",
-      "container":".ingredients-section",
-      "item":".ingredients-item",
-      "text":".ingredients-item-name"
+      "container":"ingredients-section",
+      "item":"ingredients-item",
+      "text":"ingredients-item-name"
    },
    "directions":{
       "type":"li",
