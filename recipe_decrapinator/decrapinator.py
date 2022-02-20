@@ -1,5 +1,7 @@
 import json
 import os.path
+import re
+import unicodedata
 
 import requests
 from bs4 import BeautifulSoup
@@ -64,14 +66,64 @@ def get_basic_info_from_soup(soup, schema):
     return {'info': output_data}
 
 def get_ingredients_from_soup(soup, schema):
-    output_data = []
+    output_data = {}
     ingredients_schema = schema['ingredients']
     schema_type = ingredients_schema['type']
+    if schema_type == 'li':
+        container = soup.find(class_=ingredients_schema['container'])
+        if container:
+            ingredients = container.find_all(class_=ingredients_schema['item'])
+            for ingredient in ingredients:
+                ingredient = ingredient.find(class_=ingredients_schema['text'])
+                if ingredient:
+                    ingredient = convert_ingredient(ingredient.text)
+                    output_data = output_data | ingredient
+    return {'ingredients': output_data }
 
-    return {'ingredients': output_data}
+def convert_ingredient(ingredient_text):
+    unit_of_measure = get_unit_of_measurement(ingredient_text)
+    amount = unicode_string_to_value(ingredient_text) or 0
+    ingredient_name = get_ingredient_name(ingredient_text, unit_of_measure) or 'Unknown Ingredient'
+    scale = 1
+    return {ingredient_name: {
+        'UOM': unit_of_measure,
+        'amount': amount,
+        'scaleFactor': scale,
+        'original': ingredient_text
+    }}
 
 def get_directions_from_soup(soup, schema):
     output_data = []
 
     return {'directions': output_data}
+
+def get_ingredient_name(ingredient_text, unit_of_measure):
+    if unit_of_measure:
+        return ingredient_text.replace(unit_of_measure + ' ', '')
+    return ingredient_text
+
+def get_unit_of_measurement(ingredient_text):
+    ingredient_text = ingredient_text.lower()
+    units = ['teaspoon', 'dessertspoon', 'tablespoon', 'fluid ounce',
+             'cup', 'pint', 'quart', 'gallon']
+    for unit in units:
+        if unit in ingredient_text:
+            return unit
+
+
+def unicode_string_to_value(ingredient_text):
+    filtered = ingredient_text.encode('ascii', 'ignore')
+    values = [int(i) for i in filtered.decode().split() if i.isdigit()]
+    value = sum(values)
+    codes = re.sub(r"[\x00-\x7f]+", "", ingredient_text)
+    for code in codes:
+        value +=  unicodedata.numeric(u''.join(code))
+    return value
+
+
+
+if __name__ == '__main__':
+    test = decrapinate('https://www.allrecipes.com/recipe/54165/balsamic-bruschetta/')
+    test = json.dumps(test, sort_keys=True, indent=4)
+    print(test)
 
