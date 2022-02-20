@@ -81,6 +81,7 @@ def get_ingredients_from_soup(soup, schema):
     return {'ingredients': output_data }
 
 def convert_ingredient(ingredient_text):
+    ingredient_text = ingredient_text.lower()
     unit_of_measure = get_unit_of_measurement(ingredient_text)
     amount = unicode_string_to_value(ingredient_text) or 0
     ingredient_name = get_ingredient_name(ingredient_text, unit_of_measure) or 'Unknown Ingredient'
@@ -89,7 +90,7 @@ def convert_ingredient(ingredient_text):
         'UOM': unit_of_measure,
         'amount': amount,
         'scaleFactor': scale,
-        'original': ingredient_text
+        'original': ingredient_text.strip()
     }}
 
 def get_directions_from_soup(soup, schema):
@@ -98,12 +99,13 @@ def get_directions_from_soup(soup, schema):
     return {'directions': output_data}
 
 def get_ingredient_name(ingredient_text, unit_of_measure):
+    ingredient_text = ingredient_text.encode('ascii', 'ignore').decode()
+    ingredient_text = ''.join([i for i in ingredient_text if not i.isdigit()])
     if unit_of_measure:
-        return ingredient_text.replace(unit_of_measure + ' ', '')
-    return ingredient_text
+        ingredient_text = ingredient_text.replace(unit_of_measure + ' ', '')
+    return ingredient_text.strip()
 
 def get_unit_of_measurement(ingredient_text):
-    ingredient_text = ingredient_text.lower()
     units = ['teaspoon', 'dessertspoon', 'tablespoon', 'fluid ounce',
              'cup', 'pint', 'quart', 'gallon']
     for unit in units:
