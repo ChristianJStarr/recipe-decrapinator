@@ -31,12 +31,14 @@ recipe_data = decrapinate('www.somerecipes.com/chocolate-cake/')
         'Large Grade A Egg': {
             'UOM': None,
             'amount': 2,
-            'scaleFactor': 1
+            'scaleFactor': 1,
+            'original': '2 large grade a eggs'
         },
         'White Flour': {
             'UOM': 'cup',
-            'amount': 1.75,
-            'scaleFactor': 1
+            'amount': 1.333,
+            'scaleFactor': 1.
+            'original': '1 \u2153 cup of white flour'
         }
     },
     'directions':{
