@@ -17,7 +17,7 @@ pip install recipe-decrapinator
 from recipe_decrapinator.decrapinator import decrapinate
 
 # returns recipe data object
-recipe_decrapinator.decrapinate('www.somerecipes.com/chocolate-cake/')
+recipe_data = decrapinate('www.somerecipes.com/chocolate-cake/')
 ```
 ## Recipe Data
 ```python
