@@ -37,7 +37,7 @@ recipe_data = decrapinate('www.somerecipes.com/chocolate-cake/')
         'White Flour': {
             'UOM': 'cup',
             'amount': 1.333,
-            'scaleFactor': 1.
+            'scaleFactor': 1,
             'original': '1 \u2153 cup of white flour'
         }
     },
