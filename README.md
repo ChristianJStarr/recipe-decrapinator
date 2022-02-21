@@ -2,6 +2,9 @@
 
 A simple package to scrape recipe information from major recipe sites.
 
+## Hosted Demo
+This package is being demonstrated at [recipe-decrapinator.info](https://www.recipe-decrapinator.info).
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install recipe-decrapinator.
