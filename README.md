@@ -31,16 +31,18 @@ recipe_data = decrapinate('www.somerecipes.com/chocolate-cake/')
         'servings': 16,
     },
     'ingredients': {
-        'Large Grade A Egg': {
+        'large grade a egg': {
             'UOM': None,
             'amount': 2,
             'scaleFactor': 1,
+            'required': True,
             'original': '2 large grade a eggs'
         },
-        'White Flour': {
+        'white flour': {
             'UOM': 'cup',
             'amount': 1.333,
             'scaleFactor': 1,
+            'required': True,
             'original': '1 \u2153 cup of white flour'
         }
     },
@@ -66,4 +68,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/ChristianJStarr/recipe-decrapinator/blob/main/LICENSE)
