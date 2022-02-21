@@ -82,13 +82,15 @@ def get_ingredients_from_soup(soup, schema):
 
 def convert_ingredient(ingredient_text):
     ingredient_text = ingredient_text.lower()
-    unit_of_measure = get_unit_of_measurement(ingredient_text)
+    unit_of_measure, removed_uom = get_unit_of_measurement(ingredient_text)
+    ingredient_required = '(optional)' not in ingredient_text
     amount = unicode_string_to_value(ingredient_text) or 0
-    ingredient_name = get_ingredient_name(ingredient_text, unit_of_measure) or 'Unknown Ingredient'
+    ingredient_name = get_ingredient_name(ingredient_text, removed_uom) or 'Unknown Ingredient'
     scale = 1
     return {ingredient_name: {
         'UOM': unit_of_measure,
         'amount': amount,
+        'required': ingredient_required,
         'scaleFactor': scale,
         'original': ingredient_text.strip()
     }}
@@ -101,17 +103,30 @@ def get_directions_from_soup(soup, schema):
 def get_ingredient_name(ingredient_text, unit_of_measure):
     ingredient_text = ingredient_text.encode('ascii', 'ignore').decode()
     ingredient_text = ''.join([i for i in ingredient_text if not i.isdigit()])
+    ingredient_text = ingredient_text.replace('(optional)', '')
     if unit_of_measure:
-        ingredient_text = ingredient_text.replace(unit_of_measure + ' ', '')
+        ingredient_text = ingredient_text.replace(' ' + unit_of_measure, '')
     return ingredient_text.strip()
 
 def get_unit_of_measurement(ingredient_text):
-    units = ['teaspoon', 'dessertspoon', 'tablespoon', 'fluid ounce',
-             'cup', 'pint', 'quart', 'gallon']
-    for unit in units:
-        if unit in ingredient_text:
-            return unit
-
+    units = {
+        'teaspoon': ['teaspoons', 'tsp', 'tsp.', 'teaspoon'],
+        'dessertspoon': ['dessertspoons', 'dtsp', 'dtsp.', 'dessertspoon'],
+        'tablespoon': ['tablespoons', 'tbsp', 'tbsp.', 'tablespoon'],
+        'fluid ounce': ['fluid ounces', 'fl. oz.', 'fl oz', 'fluid ounce'],
+        'cup': ['cups', 'cup'],
+        'pint': ['pints', 'tsp', 'tsp.', 'pint'],
+        'quart': ['quarts', 'qt', 'qt.','quart'],
+        'lb': ['pounds', 'lb', 'lb.','pound'],
+        'gallon': ['gallons', 'gal', 'gal.','gallon'],
+        'pinch': ['pinches', 'pinch']
+    }
+    for key in units.keys():
+        unit = units[key]
+        for variant in unit:
+            if variant in ingredient_text:
+                return key, variant
+    return None, ''
 
 def unicode_string_to_value(ingredient_text):
     filtered = ingredient_text.encode('ascii', 'ignore')
@@ -119,13 +134,16 @@ def unicode_string_to_value(ingredient_text):
     value = sum(values)
     codes = re.sub(r"[\x00-\x7f]+", "", ingredient_text)
     for code in codes:
-        value +=  unicodedata.numeric(u''.join(code))
+        try:
+            value +=  unicodedata.numeric(u''.join(code))
+        except:
+            continue
     return value
 
 
 
 if __name__ == '__main__':
-    test = decrapinate('https://www.allrecipes.com/recipe/54165/balsamic-bruschetta/')
+    test = decrapinate('https://www.allrecipes.com/recipe/278236/buffalo-chicken-wings-in-a-jar/')
     test = json.dumps(test, sort_keys=True, indent=4)
     print(test)
 
