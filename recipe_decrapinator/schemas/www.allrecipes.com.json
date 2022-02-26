@@ -1,6 +1,12 @@
 {
    "url":"www.allrecipes.com",
    "basic": {
+      "image": {
+         "type": "lazy",
+         "container": "lead-content-aside-wrapper",
+         "item": "lazy-image",
+         "attr": "data-src"
+      },
       "servings": {
          "type": "li-find",
          "container": "recipe-info-section",
