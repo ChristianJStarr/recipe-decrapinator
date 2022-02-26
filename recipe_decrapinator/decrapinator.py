@@ -3,11 +3,14 @@ import os.path
 import random
 import re
 import unicodedata
+from contextlib import closing
+
 import requests
 from html.parser import HTMLParser
 from io import StringIO
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+from selenium.webdriver import Chrome
 
 
 
@@ -121,12 +124,19 @@ def get_schema(hostname, schemas=None):
 
 ### STEP 4
 ## Use URL and Schema to get soup (site data)
-def process_recipe(url, schema):
+def process_recipe(url, schema, use_selenium=False):
     if not url or not schema:
         return {'error': 'invalid url'}
     output_data = []
-    web_data = requests.get(url)
-    soup = BeautifulSoup(web_data.text, 'lxml')
+    page_source = None
+    if use_selenium:
+        with closing(Chrome(executable_path="./chromedriver")) as browser:
+            browser.get(url)
+            page_source = browser.page_source
+    else:
+        web_data = requests.get(url)
+        page_source = web_data.text
+    soup = BeautifulSoup(page_source, 'lxml')
     if soup:
         basic_data = get_basic_info_from_soup(soup, schema)
         ingredient_data = get_ingredients_from_soup(soup, schema)
@@ -141,13 +151,28 @@ def process_recipe(url, schema):
 ## Start building the data from soup
 def get_basic_info_from_soup(soup, schema):
     output_data = {'hostname': schema['url'],
+                   'image': get_image_from_soup(soup, schema),
                    'servings': get_servings_from_soup(soup, schema),
                    'yield': get_yield_from_soup(soup, schema),
                    'cook-time': get_cook_time_from_soup(soup, schema),
                    'prep-time': get_prep_time_from_soup(soup, schema),
-                   'wait_time': get_wait_time_from_soup(soup, schema),
-                   'total_time': get_total_time_from_soup(soup, schema)}
+                   'wait-time': get_wait_time_from_soup(soup, schema),
+                   'total-time': get_total_time_from_soup(soup, schema)}
     return {'info': output_data}
+
+### STEP 5.1
+## Get recipe image from soup
+def get_image_from_soup(soup, schema):
+    image_schema = schema['basic'].get('image');
+    if image_schema:
+        schema_type = image_schema['type'];
+        if schema_type == 'lazy':
+            container = soup.find(class_=image_schema['container'])
+            if container:
+                item = container.find(class_=image_schema['item'])
+                if item:
+                    return item.get(image_schema['attr'])
+
 
 ### STEP 5.1
 ## Start building the data from soup
@@ -377,6 +402,6 @@ def get_related_ingredients(direction, ingredient_datas):
 
 ### TESTING
 if __name__ == '__main__':
-    test = decrapinate('https://www.allrecipes.com/recipe/281082/classic-lemon-pie/')
+    test = decrapinate('https://www.allrecipes.com/recipe/7284/irish-cream-chocolate-cheesecake/')
     test = json.dumps(test, sort_keys=True, indent=4)
     print(test)
