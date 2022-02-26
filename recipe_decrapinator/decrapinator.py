@@ -150,7 +150,8 @@ def process_recipe(url, schema, use_selenium=False):
 ### STEP 5
 ## Start building the data from soup
 def get_basic_info_from_soup(soup, schema):
-    output_data = {'hostname': schema['url'],
+    output_data = {'recipe-title': get_title_from_recipe(soup, schema),
+                   'hostname': schema['url'],
                    'image': get_image_from_soup(soup, schema),
                    'servings': get_servings_from_soup(soup, schema),
                    'yield': get_yield_from_soup(soup, schema),
@@ -160,19 +161,29 @@ def get_basic_info_from_soup(soup, schema):
                    'total-time': get_total_time_from_soup(soup, schema)}
     return {'info': output_data}
 
+def get_title_from_recipe(soup, schema):
+    title_schema = schema['basic'].get('title')
+    if title_schema:
+        schema_type = title_schema['type']
+        if schema_type == 'text-class':
+            container = soup.find(class_=title_schema['container'])
+            if container:
+                text = container.find(class_=title_schema['text'])
+                if text:
+                    return text.text
+
 ### STEP 5.1
 ## Get recipe image from soup
 def get_image_from_soup(soup, schema):
-    image_schema = schema['basic'].get('image');
+    image_schema = schema['basic'].get('image')
     if image_schema:
-        schema_type = image_schema['type'];
+        schema_type = image_schema['type']
         if schema_type == 'lazy':
             container = soup.find(class_=image_schema['container'])
             if container:
                 item = container.find(class_=image_schema['item'])
                 if item:
                     return item.get(image_schema['attr'])
-
 
 ### STEP 5.1
 ## Start building the data from soup
