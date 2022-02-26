@@ -13,7 +13,8 @@ setup(
         '': ['schemas/*.json'],
     },
     install_requires=['bs4',
-                      'requests'
+                      'requests',
+                      'selenium'
                       ],
 
     classifiers=[
