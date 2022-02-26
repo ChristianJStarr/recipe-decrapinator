@@ -1,6 +1,11 @@
 {
    "url":"www.allrecipes.com",
    "basic": {
+      "title": {
+         "type": "text-class",
+         "container": "main-header",
+         "text": "headline"
+      },
       "image": {
          "type": "lazy",
          "container": "lead-content-aside-wrapper",
