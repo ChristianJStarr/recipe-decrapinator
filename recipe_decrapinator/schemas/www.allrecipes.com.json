@@ -1,5 +1,35 @@
 {
    "url":"www.allrecipes.com",
+   "basic": {
+      "servings": {
+         "type": "li-find",
+         "container": "recipe-info-section",
+         "item": "recipe-meta-item",
+         "lookfor": ["Servings"],
+         "exclude": ["Servings:"]
+      },
+      "yield": {
+         "type": "li-find",
+         "container": "recipe-info-section",
+         "item": "recipe-meta-item",
+         "lookfor": ["Yield"],
+         "exclude": ["Yield:"]
+      },
+      "prep-time": {
+         "type": "li-find",
+         "container": "recipe-info-section",
+         "item": "recipe-meta-item",
+         "lookfor": ["Prep"],
+         "exclude": ["Prep:"]
+      },
+      "total-time": {
+         "type": "li-find",
+         "container": "recipe-info-section",
+         "item": "recipe-meta-item",
+         "lookfor": ["Total"],
+         "exclude": ["Total:"]
+      }
+   },
    "ingredients":{
       "type":"li",
       "container":"ingredients-section",
@@ -8,8 +38,8 @@
    },
    "directions":{
       "type":"li",
-      "container":".instructions-section",
-      "item":".instructions-section-item",
-      "text":".paragraph p"
+      "container":"instructions-section",
+      "item":"instructions-section-item",
+      "text":"paragraph"
    }
 }
